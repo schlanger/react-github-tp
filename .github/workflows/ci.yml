@@ -12,8 +12,16 @@ jobs:
       image: node:16-alpine
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Mise à jour vers v3
         
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Install dependencies
         run: yarn install
 
@@ -27,7 +35,15 @@ jobs:
       image: node:16-alpine
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Mise à jour vers v3
+
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
       - name: Install dependencies
         run: yarn install
@@ -48,7 +64,7 @@ jobs:
       image: node:16-alpine
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Mise à jour vers v3
 
       - name: Download build artifact
         uses: actions/download-artifact@v3
@@ -74,7 +90,15 @@ jobs:
       image: node:16-alpine
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Mise à jour vers v3
+
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
       - name: Install dependencies
         run: yarn install
