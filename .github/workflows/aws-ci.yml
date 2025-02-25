@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy to EC2 with Docker
 
 on:
   push:
@@ -20,9 +20,19 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy to EC2
+      - name: Deploy to EC2 with Docker
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git pull origin ${{ secrets.MAIN_BRANCH }}"
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          cd ${{ secrets.WORK_DIR }}
+          git pull origin ${{ secrets.MAIN_BRANCH }}
+
+          # Arrêter et supprimer les anciens conteneurs
+          docker-compose down
+
+          # Construire et démarrer les nouveaux conteneurs
+          docker-compose build
+          docker-compose up -d
+          EOF
 
       - name: Cleanup
         run: rm -rf ~/.ssh
