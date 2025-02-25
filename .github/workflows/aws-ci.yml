@@ -23,7 +23,7 @@ jobs:
       - name: Deploy to EC2
         run: |
           ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-          cd /path/to/your/project
+          cd /home/user/react-github-tp
           git pull origin main
           docker-compose down
           docker-compose up -d --build
